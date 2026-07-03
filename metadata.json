@@ -1,0 +1,6 @@
+{
+  "name": "Sistema de Orquestación Autónoma de Emergencias",
+  "description": "Plataforma de comando de incidentes de misión crítica, gemelo digital y simulador de entrenamiento para la optimización de recursos y mitigación de crisis urbanas.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

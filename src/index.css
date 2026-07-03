@@ -1,0 +1,487 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,400&family=Inter:wght@400;500;700&display=swap');
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme {
+  --color-brand-green: #00FF41;
+  --color-brand-black: #050505;
+  --color-brand-dark: #0a0a0a;
+  --color-brand-red: #FF4444;
+  --color-brand-gold: #FFD700;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Custom scrollbars to match retro-terminal grid style */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 65, 0.2);
+  border: 1px solid rgba(0, 255, 65, 0.4);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 65, 0.5);
+}
+
+/* Grid background overlay */
+.tech-dot-grid {
+  background-image: radial-gradient(rgba(0, 255, 65, 0.15) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Customize Leaflet style for Technical Dashboard / Data Grid aesthetic */
+.leaflet-container {
+  background: #020202 !important;
+}
+.leaflet-bar {
+  background-color: #0a0a0a !important;
+  border: 1px solid rgba(0, 255, 65, 0.3) !important;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.2) !important;
+  border-radius: 0px !important;
+}
+.leaflet-bar a {
+  background-color: #0a0a0a !important;
+  color: #00FF41 !important;
+  border-color: rgba(0, 255, 65, 0.3) !important;
+  border-radius: 0px !important;
+}
+.leaflet-bar a:hover {
+  background-color: rgba(0, 255, 65, 0.1) !important;
+  color: #00FF41 !important;
+}
+.leaflet-bar a.leaflet-disabled {
+  background-color: #050505 !important;
+  color: rgba(0, 255, 65, 0.2) !important;
+  border-color: rgba(0, 255, 65, 0.1) !important;
+  cursor: not-allowed !important;
+}
+.leaflet-popup-content-wrapper {
+  background-color: #0a0a0a !important;
+  color: #00FF41 !important;
+  border: 1px solid rgba(0, 255, 65, 0.5);
+  border-radius: 0px !important;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.2) !important;
+}
+.leaflet-popup-tip {
+  background-color: #0a0a0a !important;
+  border: 1px solid rgba(0, 255, 65, 0.5);
+}
+/* Fully hide and remove any attribution/scale overlays and ensure the corner containers are transparent */
+.leaflet-control-attribution,
+.leaflet-control-scale,
+.leaflet-container .leaflet-control-attribution,
+.leaflet-container .leaflet-control-scale {
+  display: none !important;
+  background-color: transparent !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.leaflet-bottom,
+.leaflet-right,
+.leaflet-top,
+.leaflet-left,
+.leaflet-control-container {
+  background: transparent !important;
+  background-color: transparent !important;
+  pointer-events: none !important;
+}
+
+.leaflet-control {
+  pointer-events: auto !important;
+}
+
+/* Prevent any default white background or border on Leaflet div icons */
+.leaflet-div-icon {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+}
+
+/* Ensure the browser's root canvas is dark to prevent white flashing during viewport resizing/scrolling */
+html, body {
+  background-color: #020202 !important;
+}
+
+/* Enforce solid dark background matching terminal theme on Leaflet base containers to prevent GPU white flash during scrolling/compositing */
+#mission-map-container,
+.leaflet-container,
+.leaflet-tile-pane {
+  background-color: #050505 !important;
+  background: #050505 !important;
+}
+
+/* Stacking overlay panes MUST be transparent so they layer correctly over map tiles */
+.leaflet-pane:not(.leaflet-tile-pane),
+.leaflet-tile,
+.leaflet-tile-container,
+.leaflet-layer,
+.leaflet-image-layer,
+.leaflet-overlay-pane,
+.leaflet-shadow-pane,
+.leaflet-marker-pane,
+.leaflet-popup-pane,
+.leaflet-tooltip-pane {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+
+/* Style default Leaflet zoom-box selections with cyberpunk green */
+.leaflet-zoom-box {
+  background: rgba(0, 255, 65, 0.15) !important;
+  border: 2px dashed #00FF41 !important;
+}
+
+/* Ensure failed or loading tile images are dark and match the aesthetic */
+img.leaflet-tile {
+  background-color: #020202 !important;
+}
+
+/* Customize Leaflet Tooltips to match tactical theme, in case any are opened */
+.leaflet-tooltip {
+  background-color: #0a0a0a !important;
+  color: #00FF41 !important;
+  border: 1px solid rgba(0, 255, 65, 0.5) !important;
+  border-radius: 0px !important;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.2) !important;
+}
+.leaflet-tooltip-top:before { border-top-color: #0a0a0a !important; }
+.leaflet-tooltip-bottom:before { border-bottom-color: #0a0a0a !important; }
+.leaflet-tooltip-left:before { border-left-color: #0a0a0a !important; }
+.leaflet-tooltip-right:before { border-right-color: #0a0a0a !important; }
+
+/* Custom pulsing animation for warnings */
+@keyframes tech-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.animate-tech-pulse {
+  animation: tech-pulse 1.5s infinite;
+}
+
+/* Animated Tactical Ant-Trail Route Path */
+@keyframes leaflet-ant-path-animation {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+.animated-route-path {
+  stroke-dasharray: 8, 8;
+  animation: leaflet-ant-path-animation 1.2s linear infinite !important;
+}
+
+/* Glowing hazard / avoidance zone pulses */
+@keyframes hazard-pulse {
+  0% {
+    fill-opacity: 0.05;
+    stroke-opacity: 0.3;
+  }
+  50% {
+    fill-opacity: 0.18;
+    stroke-opacity: 0.7;
+  }
+  100% {
+    fill-opacity: 0.05;
+    stroke-opacity: 0.3;
+  }
+}
+.hazard-pulse-ring {
+  animation: hazard-pulse 2.5s ease-in-out infinite !important;
+}
+
+/* Custom glowing roads & infrastructure integrity styling */
+@keyframes road-pulse {
+  0%, 100% { stroke-opacity: 0.8; }
+  50% { stroke-opacity: 0.45; }
+}
+
+.road-destroyed {
+  animation: road-pulse 1.8s ease-in-out infinite;
+  stroke-dasharray: 5, 5;
+}
+
+@keyframes sismo-heatmap-pulse {
+  0% {
+    fill-opacity: 0.08;
+    stroke-opacity: 0.2;
+  }
+  50% {
+    fill-opacity: 0.26;
+    stroke-opacity: 0.6;
+  }
+  100% {
+    fill-opacity: 0.08;
+    stroke-opacity: 0.2;
+  }
+}
+
+.infrastructure-heat-pulse {
+  animation: sismo-heatmap-pulse 2s ease-in-out infinite !important;
+}
+
+.sismo-impact-zone {
+  animation: sismo-heatmap-pulse 3s ease-in-out infinite !important;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.15); }
+  40% { transform: scale(1.05); }
+  60% { transform: scale(1.2); }
+}
+
+.animate-heartbeat {
+  animation: heartbeat 1.2s infinite;
+}
+
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 10s linear infinite;
+}
+
+/* High Contrast Mode Accessibility Overrides */
+.high-contrast-mode {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+.high-contrast-mode * {
+  text-shadow: none !important;
+}
+
+/* Force all text in high contrast mode to be completely opaque and either pure white or vibrant green/amber/red */
+.high-contrast-mode .text-white\/50,
+.high-contrast-mode .text-white\/60,
+.high-contrast-mode .text-white\/70,
+.high-contrast-mode .text-white\/80,
+.high-contrast-mode .text-white\/40,
+.high-contrast-mode .text-stone-400,
+.high-contrast-mode .text-stone-500,
+.high-contrast-mode .text-[#00FF41]\/40,
+.high-contrast-mode .text-[#00FF41]\/50,
+.high-contrast-mode .text-[#00FF41]\/60,
+.high-contrast-mode .text-[#00FF41]\/70,
+.high-contrast-mode .text-[#00FF41]\/80,
+.high-contrast-mode .text-xxs {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+  font-weight: 700 !important;
+}
+
+.high-contrast-mode .text-[#00FF41] {
+  color: #00FF41 !important;
+  font-weight: 900 !important;
+}
+
+.high-contrast-mode .border-[#00FF41]\/10,
+.high-contrast-mode .border-[#00FF41]\/20,
+.high-contrast-mode .border-[#00FF41]\/30,
+.high-contrast-mode .border-[#00FF41]\/40,
+.high-contrast-mode .border-white\/10,
+.high-contrast-mode .border-white\/20,
+.high-contrast-mode .border-stone-800,
+.high-contrast-mode .border-stone-700 {
+  border-color: #00FF41 !important;
+  border-width: 2px !important;
+}
+
+.high-contrast-mode .bg-[#050505],
+.high-contrast-mode .bg-[#0a0a0a],
+.high-contrast-mode .bg-black,
+.high-contrast-mode .bg-stone-900,
+.high-contrast-mode .bg-stone-950,
+.high-contrast-mode .bg-[#00FF41]\/10,
+.high-contrast-mode .bg-[#00FF41]\/20,
+.high-contrast-mode .bg-white\/5,
+.high-contrast-mode .bg-black\/40 {
+  background-color: #000000 !important;
+  opacity: 1 !important;
+}
+
+.high-contrast-mode button {
+  font-weight: 900 !important;
+  border-width: 2px !important;
+}
+
+.high-contrast-mode select {
+  background-color: #000000 !important;
+  color: #00FF41 !important;
+  border: 2px solid #00FF41 !important;
+  padding: 4px !important;
+}
+
+.high-contrast-mode input[type="text"],
+.high-contrast-mode textarea {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+/* --- FIRESTORE LIGHT THEME OVERRIDES --- */
+.theme-light, .theme-light html, .theme-light body {
+  background-color: #f1f5f9 !important; /* Elegant slate-100 */
+  color: #0f172a !important; /* Slate-900 */
+}
+
+/* Base text elements */
+.theme-light span,
+.theme-light p,
+.theme-light h1,
+.theme-light h2,
+.theme-light h3,
+.theme-light h4,
+.theme-light label {
+  color: #1e293b !important; /* Slate-800 */
+}
+
+/* Specific text opacity states mapped to slate equivalents */
+.theme-light .text-white,
+.theme-light .text-stone-100 {
+  color: #0f172a !important;
+}
+.theme-light .text-white/90,
+.theme-light .text-white/80,
+.theme-light .text-white/70,
+.theme-light .text-stone-300 {
+  color: #334155 !important; /* Slate-700 */
+}
+.theme-light .text-white/60,
+.theme-light .text-white/50,
+.theme-light .text-white/40,
+.theme-light .text-stone-400,
+.theme-light .text-stone-500 {
+  color: #64748b !important; /* Slate-500 */
+}
+
+/* Replace terminal green with Firebase Blue */
+.theme-light .text-[#00FF41] {
+  color: #1a73e8 !important; /* Premium Firebase Blue */
+}
+.theme-light .text-[#00FF41]/60,
+.theme-light .text-[#00FF41]/70,
+.theme-light .text-[#00FF41]/80 {
+  color: #2563eb !important;
+}
+.theme-light .text-[#00FF41]/40,
+.theme-light .text-[#00FF41]/50 {
+  color: #1e40af !important;
+}
+
+/* Mapped states for panels and cards */
+.theme-light .bg-[#050505],
+.theme-light .bg-[#0a0a0a],
+.theme-light .bg-stone-900,
+.theme-light .bg-stone-950,
+.theme-light .bg-black,
+.theme-light .bg-[#050505]/90,
+.theme-light .bg-black/80,
+.theme-light .bg-black/40 {
+  background-color: #ffffff !important; /* Pure white Firestore style */
+}
+
+/* Semi-transparent overlays mapped to soft slate fills */
+.theme-light .bg-[#00FF41]/10 {
+  background-color: #eff6ff !important; /* Light blue tint */
+}
+.theme-light .bg-[#00FF41]/20 {
+  background-color: #dbeafe !important;
+}
+
+/* Alert/Danger styling */
+.theme-light .bg-red-950/20,
+.theme-light .bg-red-950/40,
+.theme-light .bg-red-900/20 {
+  background-color: #fef2f2 !important; /* Soft light-red */
+}
+.theme-light .text-red-500 {
+  color: #dc2626 !important;
+}
+.theme-light .border-red-500/30 {
+  border-color: #fca5a5 !important;
+}
+
+/* Border styles */
+.theme-light .border-stone-800,
+.theme-light .border-stone-700,
+.theme-light .border-\[\#00FF41\]/10,
+.theme-light .border-\[\#00FF41\]/20,
+.theme-light .border-\[\#00FF41\]/30,
+.theme-light .border-white/10,
+.theme-light .border-white/20 {
+  border-color: #cbd5e1 !important; /* Clean slate border color */
+}
+
+.theme-light .border-\[\#00FF41\] {
+  border-color: #1a73e8 !important; /* Accent blue border */
+}
+
+/* Buttons and active tab controls */
+.theme-light button {
+  font-weight: 600 !important;
+}
+
+/* Map override: in light theme, the map should use a high-contrast elegant clear cartography layout or soft light pane */
+.theme-light .leaflet-container {
+  background-color: #f8fafc !important;
+}
+
+.theme-light .leaflet-bar,
+.theme-light .leaflet-bar a {
+  background-color: #ffffff !important;
+  color: #1a73e8 !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+}
+
+.theme-light .leaflet-popup-content-wrapper {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+.theme-light .leaflet-popup-tip {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.theme-light img.leaflet-tile {
+  filter: none !important; /* Ensure clear standard map rendering */
+}
+
+/* Dot grid override */
+.theme-light.tech-dot-grid {
+  background-image: radial-gradient(rgba(15, 23, 42, 0.08) 1px, transparent 1px) !important;
+}
+
+/* Scrollbars inside light theme */
+.theme-light ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+.theme-light ::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+}
+.theme-light ::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+
+
+

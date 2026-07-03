@@ -1,0 +1,34 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper to verify ID characters
+    function isValidId(id) {
+      return id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Helper to validate the incident model structure
+    function isValidIncident(data) {
+      return data.id is string
+        && data.type in ['fire', 'landslide', 'medical', 'chemical']
+        && data.lat is number && data.lat >= -90.0 && data.lat <= 90.0
+        && data.lon is number && data.lon >= -180.0 && data.lon <= 180.0
+        && data.accuracy is number && data.accuracy >= 0.0
+        && data.timestamp is number
+        && data.networkSignature is string && data.networkSignature.size() <= 256
+        && data.status in ['pending', 'dispatched', 'resolved']
+        && (!('description' in data) || (data.description is string && data.description.size() <= 5000))
+        && (!('reportedBy' in data) || (data.reportedBy is string && data.reportedBy.size() <= 128));
+    }
+
+    // Match statement for incidents collection
+    match /incidents/{incidentId} {
+      allow read, write: if true;
+    }
+    
+    // Match statement for backward compatibility or alternate paths
+    match /reports/{reportId} {
+      allow read, write: if true;
+    }
+  }
+}

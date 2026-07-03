@@ -1,0 +1,66 @@
+{
+  "entities": {
+    "Incident": {
+      "title": "Incident",
+      "description": "Live emergency incident reports.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the incident"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["fire", "landslide", "medical", "chemical"],
+          "description": "The category of the emergency incident"
+        },
+        "lat": {
+          "type": "number",
+          "description": "Latitude coordinate of the incident"
+        },
+        "lon": {
+          "type": "number",
+          "description": "Longitude coordinate of the incident"
+        },
+        "accuracy": {
+          "type": "number",
+          "description": "Accuracy in meters"
+        },
+        "timestamp": {
+          "type": "number",
+          "description": "Unix timestamp of report registration"
+        },
+        "networkSignature": {
+          "type": "string",
+          "description": "Anti-duplicate signature hash"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "dispatched", "resolved"],
+          "description": "Resolution status of the incident"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description/comments"
+        },
+        "assignedUnitId": {
+          "type": "string",
+          "description": "The ID of the dispatched fleet unit, if any"
+        },
+        "reportedBy": {
+          "type": "string",
+          "description": "The UID of the verified user who reported the incident"
+        }
+      },
+      "required": ["id", "type", "lat", "lon", "accuracy", "timestamp", "networkSignature", "status"]
+    }
+  },
+  "firestore": {
+    "/incidents/{incidentId}": {
+      "schema": {
+        "$ref": "#/entities/Incident"
+      },
+      "description": "Secure collection of verified live emergency incident records."
+    }
+  }
+}
